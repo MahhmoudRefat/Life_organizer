@@ -1,3 +1,5 @@
+import 'package:bloc/bloc.dart';
+import 'package:day_organizer/shared/cubit/cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -46,7 +48,7 @@ Widget defultformfild({
       validator: validator,
     );
 
-Widget buildtaskitem(Map model) => Padding(
+Widget buildtaskitem(Map model, context) => Padding(
       padding: const EdgeInsets.all(15.0),
       child: Row(
         children: [
@@ -57,25 +59,50 @@ Widget buildtaskitem(Map model) => Padding(
           SizedBox(
             width: 15,
           ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "${model['title']}",
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${model['title']}",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              Text(
-                "${model['date']}",
-                style: TextStyle(
-                  color: Colors.grey,
+                Text(
+                  "${model['date']}",
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
                 ),
-              ),
-            ],
-          )
+              ],
+            ),
+          ),
+          SizedBox(
+            width: 15,
+          ),
+          IconButton(
+            onPressed: () {
+              AppCubit.get(context).updateData(
+                status: 'done',
+                id: model['id'],
+              );
+            },
+            icon: Icon(Icons.check_box),
+            color: Colors.blue,
+          ),
+          IconButton(
+            onPressed: () {
+              AppCubit.get(context).updateData(
+                status: 'archive',
+                id: model['id'],
+              );
+            },
+            icon: Icon(Icons.archive),
+            color: Colors.black45,
+          ),
         ],
       ),
     );

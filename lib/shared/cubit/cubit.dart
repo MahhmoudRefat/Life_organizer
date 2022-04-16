@@ -10,10 +10,12 @@ class AppCubit extends Cubit<AppState> {
   AppCubit() : super(AppInitialState());
   static AppCubit get(context) => BlocProvider.of(context); //easy cubit object
   late Database database;
-  List<Map> tasks = [];
   IconData fabicon = Icons.edit;
   bool isBottomShowen = false;
   int CurrentINdex = 0;
+  List<Map> newtasks = [];
+  List<Map> donetasks = [];
+  List<Map> archivetasks = [];
 
   List<Widget> screens = [
     NewTasksScreen(),
@@ -43,11 +45,7 @@ class AppCubit extends Cubit<AppState> {
         print('error when creating table ${error.toString()}');
       });
     }, onOpen: (database) {
-      getDataFromDataBase(database).then((value) {
-        tasks = value;
-        print("$tasks --- 'here is y mahmoud' ");
-        emit(AppGetDatabaseState());
-      });
+      getDataFromDataBase(database);
 
       print("----database opend----");
     }).then((value) {
@@ -69,25 +67,37 @@ class AppCubit extends Cubit<AppState> {
           .then((value) {
         print("$value inserted uccessfully ");
         emit(AppInsertDatabaseState());
-        getDataFromDataBase(database).then((value) {
-          tasks = value;
-          print(tasks);
-          emit(AppGetDatabaseState());
-        });
+        getDataFromDataBase(database);
       }).catchError((error) {
         print('error when inserting table ${error.toString()}');
       });
     });
   }
 
-  Future<List<Map>> getDataFromDataBase(database) async {
+  void getDataFromDataBase(database) {
+    newtasks = [];
+    donetasks = [];
+    archivetasks = [];
     // emit(AppGetDatabaseLodingState());
-    return await database.rawQuery('SELECT * FROM tasks');
+    database.rawQuery('SELECT * FROM tasks').then((value) {
+      value.forEach((element) {
+        if (element['status'] == 'new')
+          newtasks.add(element);
+        else if (element['status'] == 'done')
+          donetasks.add(element);
+        else
+          archivetasks.add(element);
+      });
+      emit(AppGetDatabaseState());
+    });
   }
 
-  Future<int> updateData({required String status, required int id}) async {
-    return await database.rawUpdate(
-        'UPDATE tasks SET status = ? WHERE id = ?', ['$status', '$id']);
+  void updateData({required String status, required int id}) async {
+    database.rawUpdate('UPDATE tasks SET status = ? WHERE id = ?',
+        ['$status', id]).then((value) {
+      getDataFromDataBase(database);
+      emit(AppupdateDatabaseState());
+    });
   }
 
   void ChangeBottomSheetState({

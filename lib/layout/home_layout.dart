@@ -176,8 +176,4 @@ class HomeLatout extends StatelessWidget {
       ),
     );
   }
-
-  Future<String> getname() async {
-    return 'mahmoud refat';
-  }
 }
