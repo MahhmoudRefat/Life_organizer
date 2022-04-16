@@ -48,61 +48,70 @@ Widget defultformfild({
       validator: validator,
     );
 
-Widget buildtaskitem(Map model, context) => Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 40,
-            child: Text("${model['time']}"),
-          ),
-          SizedBox(
-            width: 15,
-          ),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "${model['title']}",
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  "${model['date']}",
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
+Widget buildtaskitem(Map model, context) => Dismissible(
+      key: Key(model['id'].toString()),
+      background: Container(
+        color: Colors.red,
+      ),
+      onDismissed: (direction) {
+        AppCubit.get(context).delelteData(id: model['id']);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 40,
+              child: Text("${model['time']}"),
             ),
-          ),
-          SizedBox(
-            width: 15,
-          ),
-          IconButton(
-            onPressed: () {
-              AppCubit.get(context).updateData(
-                status: 'done',
-                id: model['id'],
-              );
-            },
-            icon: Icon(Icons.check_box),
-            color: Colors.blue,
-          ),
-          IconButton(
-            onPressed: () {
-              AppCubit.get(context).updateData(
-                status: 'archive',
-                id: model['id'],
-              );
-            },
-            icon: Icon(Icons.archive),
-            color: Colors.black45,
-          ),
-        ],
+            SizedBox(
+              width: 15,
+            ),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${model['title']}",
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    "${model['date']}",
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 15,
+            ),
+            IconButton(
+              onPressed: () {
+                AppCubit.get(context).updateData(
+                  status: 'done',
+                  id: model['id'],
+                );
+              },
+              icon: Icon(Icons.check_box),
+              color: Colors.blue,
+            ),
+            IconButton(
+              onPressed: () {
+                AppCubit.get(context).updateData(
+                  status: 'archive',
+                  id: model['id'],
+                );
+              },
+              icon: Icon(Icons.archive),
+              color: Colors.black45,
+            ),
+          ],
+        ),
       ),
     );
