@@ -168,7 +168,7 @@ class HomeLatout extends StatelessWidget {
                 BottomNavigationBarItem(icon: Icon(Icons.menu), label: "Tasks"),
                 BottomNavigationBarItem(icon: Icon(Icons.check), label: "Done"),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.archive_outlined), label: "Archived"),
+                    icon: Icon(Icons.star), label: "Bookmarked"),
               ],
             ),
           );
