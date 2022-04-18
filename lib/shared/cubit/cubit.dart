@@ -25,7 +25,7 @@ class AppCubit extends Cubit<AppState> {
   List<String> titles = [
     "New Task ",
     "Done Task ",
-    "Archived Task",
+    "Bookmarked",
   ];
   void ChangeIndex(int index) {
     CurrentINdex = index;

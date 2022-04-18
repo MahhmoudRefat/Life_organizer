@@ -108,7 +108,7 @@ Widget buildtaskitem(Map model, context) => Dismissible(
                   id: model['id'],
                 );
               },
-              icon: Icon(Icons.archive),
+              icon: Icon(Icons.star_border_outlined),
               color: Colors.black45,
             ),
           ],
